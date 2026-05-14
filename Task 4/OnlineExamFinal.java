@@ -18,18 +18,22 @@ public class OnlineExamFinal extends JFrame implements ActionListener {
     String name = "", email = "", password = "1234";
 
     JLabel qLabel, timerLabel, userLabel;
+
     JRadioButton opt1, opt2, opt3, opt4;
     ButtonGroup bg;
+
     JButton nextBtn, prevBtn, submitBtn, logoutBtn, profileBtn;
 
     List<Integer> order = new ArrayList<>();
+
     int current = 0, time = 60;
+
     int[] userAnswers;
+
     boolean submitted = false;
 
     javax.swing.Timer timer;
 
-    // 10 QUESTIONS
     String[] questions = {
             "Which keyword is used to create object?",
             "Which is not primitive type?",
@@ -59,16 +63,24 @@ public class OnlineExamFinal extends JFrame implements ActionListener {
     int[] answers = {0, 2, 2, 2, 3, 0, 3, 2, 0, 3};
 
     public OnlineExamFinal() {
+
         setTitle("Online Examination System");
+
         setSize(600, 450);
+
         setLayout(null);
+
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
         showLogin();
+
         setVisible(true);
     }
 
     void showLogin() {
+
         getContentPane().removeAll();
+
         getContentPane().setBackground(new Color(20, 30, 40));
 
         JLabel n = new JLabel("Name:");
@@ -116,14 +128,21 @@ public class OnlineExamFinal extends JFrame implements ActionListener {
     }
 
     void startExam() {
+
         getContentPane().removeAll();
+
         getContentPane().setBackground(new Color(10, 25, 45));
 
         userAnswers = new int[questions.length];
+
         Arrays.fill(userAnswers, -1);
 
         order.clear();
-        for (int i = 0; i < questions.length; i++) order.add(i);
+
+        for (int i = 0; i < questions.length; i++) {
+            order.add(i);
+        }
+
         Collections.shuffle(order);
 
         userLabel = new JLabel("Welcome, " + name);
@@ -147,15 +166,38 @@ public class OnlineExamFinal extends JFrame implements ActionListener {
         opt4 = new JRadioButton();
 
         JRadioButton[] opts = {opt1, opt2, opt3, opt4};
+
         for (int i = 0; i < 4; i++) {
-            opts[i].setBounds(50, 100 + i * 30, 400, 30);
+
+            opts[i].setBounds(50, 100 + i * 40, 400, 30);
+
             opts[i].setBackground(new Color(10, 25, 45));
+
             opts[i].setForeground(Color.WHITE);
+
+            opts[i].setFont(new Font("Arial", Font.PLAIN, 16));
+
+            opts[i].addItemListener(e -> {
+
+                for (JRadioButton rb : opts) {
+
+                    if (rb.isSelected()) {
+                        rb.setForeground(Color.GREEN);
+                    } else {
+                        rb.setForeground(Color.WHITE);
+                    }
+                }
+            });
+
             add(opts[i]);
         }
 
         bg = new ButtonGroup();
-        bg.add(opt1); bg.add(opt2); bg.add(opt3); bg.add(opt4);
+
+        bg.add(opt1);
+        bg.add(opt2);
+        bg.add(opt3);
+        bg.add(opt4);
 
         prevBtn = new JButton("Previous");
         prevBtn.setBackground(Color.ORANGE);
@@ -170,23 +212,38 @@ public class OnlineExamFinal extends JFrame implements ActionListener {
         logoutBtn.setBackground(Color.RED);
 
         profileBtn = new JButton("Profile");
-        profileBtn.setBackground(Color.PINK); // ✅ Pink color
-        profileBtn.setForeground(Color.WHITE); // ✅ White text
+        profileBtn.setBackground(Color.PINK);
+        profileBtn.setForeground(Color.WHITE);
 
-        JButton[] btns = {prevBtn, nextBtn, submitBtn, logoutBtn, profileBtn};
+        JButton[] btns = {
+                prevBtn,
+                nextBtn,
+                submitBtn,
+                logoutBtn,
+                profileBtn
+        };
+
         int x = 30;
+
         for (JButton b : btns) {
-            b.setBounds(x, 300, 100, 30);
+
+            b.setBounds(x, 320, 100, 30);
+
             b.setForeground(Color.WHITE);
+
             b.addActionListener(this);
+
             add(b);
+
             x += 110;
         }
 
         loadQuestion();
 
         timer = new javax.swing.Timer(1000, e -> {
+
             time--;
+
             timerLabel.setText("Time: " + time);
 
             if (time <= 10) {
@@ -194,17 +251,22 @@ public class OnlineExamFinal extends JFrame implements ActionListener {
             }
 
             if (time == 0) {
+
                 userAnswers[current] = getSelected();
+
                 submitExam();
             }
         });
+
         timer.start();
 
         repaint();
     }
 
     void loadQuestion() {
+
         int i = order.get(current);
+
         qLabel.setText("Q" + (current + 1) + ": " + questions[i]);
 
         opt1.setText(options[i][0]);
@@ -214,12 +276,30 @@ public class OnlineExamFinal extends JFrame implements ActionListener {
 
         bg.clearSelection();
 
+        opt1.setForeground(Color.WHITE);
+        opt2.setForeground(Color.WHITE);
+        opt3.setForeground(Color.WHITE);
+        opt4.setForeground(Color.WHITE);
+
         if (userAnswers[current] != -1) {
+
             switch (userAnswers[current]) {
-                case 0 -> opt1.setSelected(true);
-                case 1 -> opt2.setSelected(true);
-                case 2 -> opt3.setSelected(true);
-                case 3 -> opt4.setSelected(true);
+
+                case 0:
+                    opt1.setSelected(true);
+                    break;
+
+                case 1:
+                    opt2.setSelected(true);
+                    break;
+
+                case 2:
+                    opt3.setSelected(true);
+                    break;
+
+                case 3:
+                    opt4.setSelected(true);
+                    break;
             }
         }
 
@@ -227,24 +307,42 @@ public class OnlineExamFinal extends JFrame implements ActionListener {
     }
 
     int getSelected() {
-        if (opt1.isSelected()) return 0;
-        if (opt2.isSelected()) return 1;
-        if (opt3.isSelected()) return 2;
-        if (opt4.isSelected()) return 3;
+
+        if (opt1.isSelected())
+            return 0;
+
+        if (opt2.isSelected())
+            return 1;
+
+        if (opt3.isSelected())
+            return 2;
+
+        if (opt4.isSelected())
+            return 3;
+
         return -1;
     }
 
     void submitExam() {
-        if (submitted) return;
+
+        if (submitted)
+            return;
+
         submitted = true;
+
         timer.stop();
 
         int correct = 0;
+
         for (int i = 0; i < questions.length; i++) {
-            if (userAnswers[i] == answers[order.get(i)]) correct++;
+
+            if (userAnswers[i] == answers[order.get(i)]) {
+                correct++;
+            }
         }
 
         int wrong = questions.length - correct;
+
         int percent = (correct * 100) / questions.length;
 
         JOptionPane.showMessageDialog(this,
@@ -257,86 +355,144 @@ public class OnlineExamFinal extends JFrame implements ActionListener {
     }
 
     void saveResult(int score) {
-        try {
-            FileWriter fw = new FileWriter("result.txt", true);
-            String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 
-            fw.write("Name: " + name +
-                    "\nEmail: " + email +
-                    "\nScore: " + score + "/" + questions.length +
-                    "\nDate: " + date + "\n\n");
+        try {
+
+            FileWriter fw = new FileWriter("result.txt", true);
+
+            String date = new SimpleDateFormat("dd-MM-yyyy")
+                    .format(new Date());
+
+            fw.write(
+                    "Name: " + name +
+                            "\nEmail: " + email +
+                            "\nScore: " + score + "/" + questions.length +
+                            "\nDate: " + date + "\n\n"
+            );
 
             fw.close();
+
         } catch (Exception e) {
+
             e.printStackTrace();
         }
     }
 
+    // PROFILE - CHANGE PASSWORD ONLY
     void showProfile() {
-        JTextField nameF = new JTextField(name);
-        JTextField emailF = new JTextField(email);
-        JPasswordField passF = new JPasswordField(password);
 
-        Object[] fields = {"Name:", nameF, "Email:", emailF, "Password:", passF};
+        JPasswordField oldPass = new JPasswordField();
 
-        int option = JOptionPane.showConfirmDialog(this, fields, "Profile", JOptionPane.OK_CANCEL_OPTION);
+        JPasswordField newPass = new JPasswordField();
+
+        Object[] fields = {
+                "Current Password:", oldPass,
+                "New Password:", newPass
+        };
+
+        int option = JOptionPane.showConfirmDialog(
+                this,
+                fields,
+                "Change Password",
+                JOptionPane.OK_CANCEL_OPTION
+        );
 
         if (option == JOptionPane.OK_OPTION) {
-            name = nameF.getText();
-            email = emailF.getText();
-            password = new String(passF.getPassword());
+
+            String oldPassword = new String(oldPass.getPassword());
+
+            String newPassword = new String(newPass.getPassword());
+
+            if (oldPassword.equals(password)) {
+
+                password = newPassword;
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Password Updated Successfully"
+                );
+
+            } else {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Wrong Current Password"
+                );
+            }
         }
     }
 
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == loginBtn) {
+
             name = nameField.getText();
+
             email = emailField.getText();
 
             if (userField.getText().equals("admin") &&
                     new String(passField.getPassword()).equals(password)) {
+
                 startExam();
+
             } else {
+
                 JOptionPane.showMessageDialog(this, "Invalid Login");
             }
         }
 
         else if (e.getSource() == nextBtn && !submitted) {
+
             userAnswers[current] = getSelected();
 
             if (current == questions.length - 1) {
-                JOptionPane.showMessageDialog(this, "This is the last question");
+
+                JOptionPane.showMessageDialog(this,
+                        "This is the last question");
+
             } else {
+
                 current++;
+
                 loadQuestion();
             }
         }
 
         else if (e.getSource() == prevBtn && !submitted) {
+
             userAnswers[current] = getSelected();
+
             if (current > 0) {
+
                 current--;
+
                 loadQuestion();
             }
         }
 
         else if (e.getSource() == submitBtn) {
+
             userAnswers[current] = getSelected();
+
             submitExam();
         }
 
         else if (e.getSource() == profileBtn) {
+
             showProfile();
         }
 
         else if (e.getSource() == logoutBtn) {
-            if (timer != null) timer.stop();
+
+            if (timer != null)
+                timer.stop();
+
             showLogin();
         }
     }
 
     public static void main(String[] args) {
+
         new OnlineExamFinal();
     }
 }
